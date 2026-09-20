@@ -75,20 +75,24 @@ class plots_linear_regression:
         ax.set_xlabel("X")
         ax.set_ylabel("estimated Y")
         ax.legend()
-    
+
     def plot_parameters_path(self) -> None:
         """
         Plots in 3D for each w and b calculated by the model, the corresponding J
         """
 
-        figure = plt.figure(figsize=(20,30))
-        ax = figure.add_subplot(111, projection='3d')
-        ax.plot(self.linear_regression.w_list, self.linear_regression.b_list, self.linear_regression.cost_list, color = 'mediumpurple')
-        ax.view_init(elev = 0, azim = 30)
-
+        figure = plt.figure(figsize=(20, 30))
+        ax = figure.add_subplot(111, projection="3d")
+        ax.plot(
+            self.linear_regression.w_list,
+            self.linear_regression.b_list,
+            self.linear_regression.cost_list,
+            color="mediumpurple",
+        )
+        ax.view_init(elev=0, azim=30)
 
         # label
-        ax.set_title('Parameters path')
+        ax.set_title("Parameters path")
         ax.set_xlabel("b", fontsize=20, labelpad=15)
         ax.set_ylabel("w", fontsize=20, labelpad=15)
         ax.set_zlabel("J(w,b)", fontsize=20, labelpad=10)
