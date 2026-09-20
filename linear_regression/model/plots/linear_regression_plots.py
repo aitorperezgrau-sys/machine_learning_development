@@ -15,7 +15,7 @@ class plots_linear_regression:
         ax.scatter(
             self.linear_regression.input_variables,
             self.linear_regression.ouput_variables,
-            color="mediumturquoise",
+            color="navy",
             marker="1",
         )
 
@@ -38,7 +38,7 @@ class plots_linear_regression:
         estimated_y_array = (
             self.linear_regression.w * x_array + self.linear_regression.b
         )
-        ax.plot(x_array, estimated_y_array, color="navajowhite")
+        ax.plot(x_array, estimated_y_array, color="darkorange")
 
         # label
         ax.set_title("Model")
@@ -55,7 +55,7 @@ class plots_linear_regression:
         ax.scatter(
             self.linear_regression.input_variables,
             self.linear_regression.ouput_variables,
-            color="mediumturquoise",
+            color="navy",
             marker="1",
             label="Training set",
         )
@@ -68,9 +68,10 @@ class plots_linear_regression:
         estimated_y_array = (
             self.linear_regression.w * x_array + self.linear_regression.b
         )
-        ax.plot(x_array, estimated_y_array, color="navajowhite", label="Model")
+        ax.plot(x_array, estimated_y_array, color="darkorange", label="Model")
 
         # label
         ax.set_title("Model vs training set")
         ax.set_xlabel("X")
         ax.set_ylabel("estimated Y")
+        ax.legend()
