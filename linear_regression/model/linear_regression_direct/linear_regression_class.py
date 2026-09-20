@@ -110,7 +110,7 @@ class linear_regression:
             b: float | int,
             prev_total_cost: float | int,
             numerically: bool = False,
-        ) -> float:
+        ) -> tuple:
             """
             Calculates the derivatives of the cost error function. 
 
@@ -129,8 +129,9 @@ class linear_regression:
 
             Returns
             -------
-            dj_dw: float, int
-                Derivative of the cost error function with respect to w when b is constant.
+            dj_dw, dj_db: tuple
+                Derivative of the cost error function with respect to w when b is constant, and 
+                with respect to b when w is constant for the w and b given as parameter. 
             """
 
             if numerically is True:
@@ -172,7 +173,7 @@ class linear_regression:
             self.cost_list.append(total_cost)
 
             diff_total_cost = abs(total_cost - prev_total_cost)
-            
+
             w_prev = w
             b_prev = b
             prev_total_cost = total_cost
