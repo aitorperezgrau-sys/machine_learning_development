@@ -1,0 +1,8 @@
+[project]
+name = "linear_regression_library"
+version = "0.1.0"
+description = "Library with linear regression."
+dependencies = [
+    "numpy",
+    "matplotlib"
+]

@@ -1,0 +1,1 @@
+from model.linear_regression_direct.linear_regression_class import linear_regression

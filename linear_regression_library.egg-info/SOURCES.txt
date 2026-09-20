@@ -1,0 +1,10 @@
+pyproject.toml
+linear_regression_library.egg-info/PKG-INFO
+linear_regression_library.egg-info/SOURCES.txt
+linear_regression_library.egg-info/dependency_links.txt
+linear_regression_library.egg-info/requires.txt
+linear_regression_library.egg-info/top_level.txt
+model/linear_regression_direct/__init__.py
+model/linear_regression_direct/linear_regression_class.py
+model/plots/__init__.py
+model/plots/linear_regression_plots.py

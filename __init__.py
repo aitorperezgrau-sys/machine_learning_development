@@ -1,0 +1,2 @@
+from model.linear_regression_direct.linear_regression_class import linear_regression
+from model.plots.linear_regression_plots import plots_linear_regression
