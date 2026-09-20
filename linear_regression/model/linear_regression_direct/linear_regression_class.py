@@ -25,6 +25,12 @@ class linear_regression:
             Initial b.
         linear_regression.alpha: float, int
             Step for the gradient descent.
+        w_list: list 
+            Set of the w values, w path. 
+        b_list: list
+            Set of the b values, b path. 
+        cost_list: list
+            Set of the cost error, J path. 
 
         Parameters
         ----------
@@ -50,6 +56,9 @@ class linear_regression:
         self.w = None
         self.b = None
         self.plots = plots_linear_regression(self)
+        self.b_list = []
+        self.w_list = []
+        self.cost_list = []
 
     def gradient_descent(self) -> None:
         """This function creates a gradient descent algorithm based on the
@@ -140,7 +149,12 @@ class linear_regression:
         diff_total_cost = abs(total_cost - prev_total_cost)
         w_prev = self.w_init
         b_prev = self.b_init
+        self.b_list.append(b_prev)
+        self.w_list.append(w_prev)
+        self.cost_list.append(prev_total_cost)
+
         while diff_total_cost >= 1e-6:
+
             w = w_prev - self.alpha * compute_cost_error_partial_w(
                 w_prev, b_prev, prev_total_cost
             )
@@ -148,10 +162,13 @@ class linear_regression:
                 w_prev, b_prev, prev_total_cost
             )
             total_cost = compute_total_cost(w, b)
+            self.b_list.append(b)
+            self.w_list.append(w)
+            self.cost_list.append(total_cost)
             diff_total_cost = abs(total_cost - prev_total_cost)
             w_prev = w
             b_prev = b
             prev_total_cost = total_cost
 
-        self.w = w_prev
-        self.b = b_prev
+        self.w = self.w_list[-1]
+        self.b = self.b_list[-1]
