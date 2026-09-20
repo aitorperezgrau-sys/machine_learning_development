@@ -14,7 +14,7 @@ class plots_linear_regression:
         ax = figure.add_subplot(111)
         ax.scatter(
             self.linear_regression.input_variables,
-            self.linear_regression.ouput_variables,
+            self.linear_regression.output_variables,
             color="navy",
             marker="1",
         )
@@ -54,7 +54,7 @@ class plots_linear_regression:
         ax = figure.add_subplot(111)
         ax.scatter(
             self.linear_regression.input_variables,
-            self.linear_regression.ouput_variables,
+            self.linear_regression.output_variables,
             color="navy",
             marker="1",
             label="Training set",

@@ -56,7 +56,7 @@ class linear_regression:
         """
 
         self.input_variables = input_variables
-        self.ouput_variables = output_variables
+        self.output_variables = output_variables
         self.alpha = alpha
         self.w_init = w_init
         self.b_init = b_init
@@ -72,14 +72,15 @@ class linear_regression:
     def gradient_descent(self, numerically: bool = False) -> None:
         """This function creates a gradient descent algorithm based on the
         input parameter, alpha, initial w and b and the training input variables/features
-        x and ouput/target variables y
+        x and output/target variables y
 
         Parameters
         ----------
         numerically: bool, optional 
             If numerically, the partial derivative will be calculated using definition 
             of derivative. Otherwise, with the derivative of the cost error function with
-            respect to w. Default is False.
+            respect to the corresponding parameter, it uses a 'batch' approach, meaning each
+            step of the gradient uses all training examples. Default is False. 
         """
 
         def compute_total_cost(w: float | int, b: float | int) -> float:
@@ -95,39 +96,32 @@ class linear_regression:
 
             Returns
             -------
-                total_cost: float, int
-                    The cost of using w,b as the parameters for linear regression
-                        to fit the data points in x and y
+            total_error: float, int
+                The cost of using w,b as the parameters for linear regression
+                    to fit the data points in x and y
             """
-            m = self.input_variables.shape[0]
+            error_array = (w * self.input_variables + b) - self.output_variables
+            total_error = float(np.mean(error_array ** 2) / 2.0)
+            return total_error
+        
 
-            cost_sum = 0
-            for i in range(m):
-                f_wb = w * self.input_variables[i] + b
-                cost = (f_wb - self.ouput_variables[i]) ** 2
-                cost_sum = cost_sum + cost
-            total_cost = (1 / (2 * m)) * cost_sum
-
-            return total_cost
-
-        def compute_cost_error_partial_w(
-            w_prev: float | int,
-            constant_b: float | int,
+        def compute_dj(
+            w: float | int,
+            b: float | int,
             prev_total_cost: float | int,
             numerically: bool = False,
         ) -> float:
             """
-            Calculates the derivative of the cost error function with respect to w
-            when b is constant with a value of `constant_b`.
+            Calculates the derivatives of the cost error function. 
 
             Parameters
             ----------
-            w_prev: float, int
+            w: float, int
                 Previous w.
-            constant_b: float, int
+            b: float, int
                 Value of the parameter b to calculate the derivative, it is also the previous b.
-            prev_total_cost: float, int
-                Total cost error for w_prev and b_prev
+            prev_total_cost: float, int, optional 
+                Total cost error for w_prev and b_prev. Necessary when numerically is True. 
             numerically: bool
                 If numerically, the partial derivative will be calculated using definition 
                 of derivative. Otherwise, with the derivative of the cost error function with
@@ -135,119 +129,27 @@ class linear_regression:
 
             Returns
             -------
-            cost_error_partial_w: float, int
+            dj_dw: float, int
                 Derivative of the cost error function with respect to w when b is constant.
             """
 
             if numerically is True:
-                cost_error_partial_w = (
-                    compute_total_cost(w_prev + 0.00000001, constant_b)
+                dj_dw = (
+                    compute_total_cost(w + 0.00000001, b)
+                    - prev_total_cost
+                ) / 0.00000001
+                dj_db = (
+                    compute_total_cost(w, b + 0.00000001)
                     - prev_total_cost
                 ) / 0.00000001
             else:
-                cost_error_partial_w = calculate_partial_w_with_function(
-                    w_prev, constant_b
-                )
-            return cost_error_partial_w
+                error_array = (w * self.input_variables + b) - self.output_variables
+                dj_db = float(np.mean(error_array)) 
+                dj_dw = float(np.mean(error_array * self.input_variables))
 
-        def compute_cost_error_partial_b(
-            constant_w: float | int,
-            b_prev: float | int,
-            prev_total_cost: float | int,
-            numerically: bool = False,
-        ) -> float:
-            """
-            Calculates the derivative of the cost error function with respect to b
-            when w is constant with a value of `constant_w`.
+            return dj_dw, dj_db
 
-            Parameters
-            ----------
-            constant_w: float, int
-                Value of the parameter w to calculate the derivative, it is also the previous w.
-            b_prev: float, int
-                Previous b.
-            prev_total_cost: float, int
-                Total cost error for w_prev and b_prev
-            numerically: bool
-                If numerically, the partial derivative will be calculated using definition 
-                of derivative. Otherwise, with the derivative of the cost error function with
-                respect to w. Default is False.
-                
-            Returns
-            -------
-            cost_error_partial_v: float, int
-                Derivative of the cost error function with respect to w when b is constant.
-            """
-            if numerically is True:
-                cost_error_partial_b = (
-                    compute_total_cost(constant_w, b_prev + 0.00000001)
-                    - prev_total_cost
-                ) / 0.00000001
-            else:
-                cost_error_partial_b = calculate_partial_b_with_function(
-                    constant_w, b_prev
-                )
-            return cost_error_partial_b
 
-        def calculate_partial_b_with_function(
-            constant_w: float | int, b_prev: float | int
-        ) -> float:
-            """
-            Calculates the partial derivative of the cost error function with respect to b
-            based on the function expression.
-
-            Parameters
-            ----------
-            constant_w: float, int
-                Value of the parameter w to calculate the derivative, it is also the previous w.
-            b_prev: float, int
-                Previous b.
-
-            Returns
-            --------
-            cost_error_partial_b: float, int
-                Partial derivative of the cost error funciton when w is `constant_w`.
-            """
-            m = self.input_variables.shape[0]
-
-            cost_sum_partial = 0
-            for i in range(m):
-                f_wb = constant_w * self.input_variables[i] + b_prev
-                cost = (f_wb - self.ouput_variables[i]) 
-                cost_sum_partial = cost_sum_partial + cost
-            cost_error_partial_b = (1 / m) * cost_sum_partial
-
-            return cost_error_partial_b
-
-        def calculate_partial_w_with_function(
-            w_prev: float | int, constant_b: float | int
-        ) -> float:
-            """
-            Calculates the partial derivative of the cost error function with respect to w
-            based on the function expression.
-
-            Parameters
-            ----------
-            w_prev: float, int
-                Previous w.
-            constant_b: float, int
-                Value of the parameter b to calculate the derivative, it is also the previous b.
-
-            Returns
-            --------
-            cost_error_partial_w: float, int
-                Partial derivative of the cost error funciton when b is `constant_b`.
-            """
-            m = self.input_variables.shape[0]
-
-            cost_sum_partial = 0
-            for i in range(m):
-                f_wb = w_prev * self.input_variables[i] + constant_b
-                cost = (f_wb - self.ouput_variables[i]) * self.input_variables[i]
-                cost_sum_partial = cost_sum_partial + cost
-            cost_error_partial_w = (1 / m) * cost_sum_partial
-
-            return cost_error_partial_w
 
         prev_total_cost = compute_total_cost(self.w_init, self.b_init)
         total_cost = np.inf
@@ -259,18 +161,18 @@ class linear_regression:
         self.cost_list.append(prev_total_cost)
 
         while diff_total_cost >= 1e-6:
+            dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
 
-            w = w_prev - self.alpha * compute_cost_error_partial_w(
-                w_prev, b_prev, prev_total_cost, numerically
-            )
-            b = b_prev - self.alpha * compute_cost_error_partial_b(
-                w_prev, b_prev, prev_total_cost, numerically
-            )
+            w = w_prev - self.alpha * dj_dw
+            b = b_prev - self.alpha * dj_db
             total_cost = compute_total_cost(w, b)
+
             self.b_list.append(b)
             self.w_list.append(w)
             self.cost_list.append(total_cost)
+
             diff_total_cost = abs(total_cost - prev_total_cost)
+            
             w_prev = w
             b_prev = b
             prev_total_cost = total_cost
