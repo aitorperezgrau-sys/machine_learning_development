@@ -169,7 +169,7 @@ time for convergence: 3.19501870800741 s
 final cost J(w,b): 4.984231649804137e-13
 ```
 
-Comparing the fitted parameters against the known baseline confirms proper model implementation:
+Comparing the fitted parameters against the known baseline confirms a proper model implementation:
 
 | Parameter | Model | Real value | Absolute error ($\Delta$) | Relative error |
 | :--- | :---: | :---: | :---: | :---: |
