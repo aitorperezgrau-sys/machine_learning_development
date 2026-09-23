@@ -8,13 +8,14 @@ class prints_linear_regression:
         """
         print(f'w: {self.linear_regression.w}')
         print(f'b: {self.linear_regression.b}')
-        print(f'number of parameters before convergence: {len(self.linear_regression.w_list)}')
+        print(f'number of iterations for convergence: {len(self.linear_regression.w_list)}')
+        print(f'time for convergence: {self.linear_regression.t_convergence} s')
 
     def error_info(self) -> None: 
         """
         Prints the important information regarding the error. 
         """
-        print(f'Final mean squared error: {self.linear_regression.j}')
+        print(f'final cost J(w,b): {self.linear_regression.j}')
 
     def all(self) -> None:
         """

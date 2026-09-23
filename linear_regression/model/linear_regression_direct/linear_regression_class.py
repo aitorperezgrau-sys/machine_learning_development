@@ -1,8 +1,7 @@
 import numpy as np
-
 from model.plots.linear_regression_plots import plots_linear_regression
 from model.prints.linear_regression_prints import prints_linear_regression
-
+import time
 
 class linear_regression:
 
@@ -68,8 +67,9 @@ class linear_regression:
         self.b_list = []
         self.w_list = []
         self.cost_list = []
+        self.t_convergence = None
 
-    def gradient_descent(self, numerically: bool = False) -> None:
+    def gradient_descent(self, numerically: bool = False, convergence_method: str = 'zero_gradient') -> None:
         """This function creates a gradient descent algorithm based on the
         input parameter, alpha, initial w and b and the training input variables/features
         x and output/target variables y
@@ -81,6 +81,12 @@ class linear_regression:
             of derivative. Otherwise, with the derivative of the cost error function with
             respect to the corresponding parameter, it uses a 'batch' approach, meaning each
             step of the gradient uses all training examples. Default is False. 
+        convergence_method: str, optional
+            Way of getting convergence of the model. Allowed parameters are 
+            - `zero_gradient`: convergence condition is gradient of the cost error funciton is almost 0
+            - 'zero_difference': convergence condition is difference between the cost error function of the previous
+              iteration and the current one is almost 0. 
+            Default is 'zero_gradient'. 
         """
 
         def compute_total_cost(w: float | int, b: float | int) -> float:
@@ -151,33 +157,55 @@ class linear_regression:
             return dj_dw, dj_db
 
 
-
         prev_total_cost = compute_total_cost(self.w_init, self.b_init)
         total_cost = np.inf
-        diff_total_cost = abs(total_cost - prev_total_cost)
         w_prev = self.w_init
         b_prev = self.b_init
         self.b_list.append(b_prev)
         self.w_list.append(w_prev)
         self.cost_list.append(prev_total_cost)
 
-        while diff_total_cost >= 1e-6:
-            dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
-
-            w = w_prev - self.alpha * dj_dw
-            b = b_prev - self.alpha * dj_db
-            total_cost = compute_total_cost(w, b)
-
-            self.b_list.append(b)
-            self.w_list.append(w)
-            self.cost_list.append(total_cost)
-
+        if convergence_method == 'zero_difference':
             diff_total_cost = abs(total_cost - prev_total_cost)
+            t0 = time.perf_counter()
+            while diff_total_cost >= 1e-8:
+                dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
 
-            w_prev = w
-            b_prev = b
-            prev_total_cost = total_cost
+                w = w_prev - self.alpha * dj_dw
+                b = b_prev - self.alpha * dj_db
+                total_cost = compute_total_cost(w, b)
 
+                self.b_list.append(b)
+                self.w_list.append(w)
+                self.cost_list.append(total_cost)
+
+                diff_total_cost = abs(total_cost - prev_total_cost)
+
+                w_prev = w
+                b_prev = b
+                prev_total_cost = total_cost
+            self.t_convergence = time.perf_counter() - t0
+
+        elif convergence_method == 'zero_gradient':
+            dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
+            t0 = time.perf_counter()
+            while np.linalg.norm(np.array([dj_dw,dj_db]))>= 1e-6:
+                dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
+
+                w = w_prev - self.alpha * dj_dw
+                b = b_prev - self.alpha * dj_db
+                total_cost = compute_total_cost(w, b)
+
+                self.b_list.append(b)
+                self.w_list.append(w)
+                self.cost_list.append(total_cost)
+                w_prev = w
+                b_prev = b
+                prev_total_cost = total_cost
+            self.t_convergence = time.perf_counter() - t0
+        else:
+            raise ValueError(f"{convergence_method} is not an allowed convergence method: 'zero_gradient' or 'zero_difference'")
+        
         self.w = self.w_list[-1]
         self.b = self.b_list[-1]
         self.j = self.cost_list[-1]
