@@ -6,20 +6,22 @@ class prints_linear_regression:
         """
         Prints the important information regarding the parameters
         """
-        print(f'w: {self.linear_regression.w}')
-        print(f'b: {self.linear_regression.b}')
-        print(f'number of iterations for convergence: {len(self.linear_regression.w_list)}')
-        print(f'time for convergence: {self.linear_regression.t_convergence} s')
+        print(f"w: {self.linear_regression.w}")
+        print(f"b: {self.linear_regression.b}")
+        print(
+            f"number of iterations for convergence: {len(self.linear_regression.w_list)}"
+        )
+        print(f"time for convergence: {self.linear_regression.t_convergence} s")
 
-    def error_info(self) -> None: 
+    def error_info(self) -> None:
         """
-        Prints the important information regarding the error. 
+        Prints the important information regarding the error.
         """
-        print(f'final cost J(w,b): {self.linear_regression.j}')
+        print(f"final cost J(w,b): {self.linear_regression.j}")
 
     def all(self) -> None:
         """
-        Prints all the relevant information of the model. 
+        Prints all the relevant information of the model.
         """
         self.parameter_info()
         self.error_info()

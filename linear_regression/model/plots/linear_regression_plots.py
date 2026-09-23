@@ -69,7 +69,7 @@ class plots_linear_regression:
             max(self.linear_regression.input_variables),
             100,
         )
-        estimated_y_array = (w * x_array + b)
+        estimated_y_array = w * x_array + b
         ax.plot(x_array, estimated_y_array, color="darkorange", label="Model")
 
         # label
@@ -78,8 +78,9 @@ class plots_linear_regression:
         ax.set_ylabel("estimated Y")
         ax.legend()
 
-    def plot_parameters_path(self, elev: float | int | None = None,
-        azim: float | int | None = None) -> None:
+    def plot_parameters_path(
+        self, elev: float | int | None = None, azim: float | int | None = None
+    ) -> None:
         """
         Plots in 3D for each w and b calculated by the model, the corresponding J
         Parameters
@@ -107,15 +108,23 @@ class plots_linear_regression:
         ax.set_title("Parameters path", fontsize=15)
         ax.set_xlabel("w", fontsize=11, labelpad=8)
         ax.set_ylabel("b", fontsize=11, labelpad=8)
-        ax.set_zlabel("") 
+        ax.set_zlabel("")
         ax.text2D(
-            -0.05, 0.5, "J(w, b)",
-            fontsize=11, rotation=90, va="center", ha="center",
+            -0.05,
+            0.5,
+            "J(w, b)",
+            fontsize=11,
+            rotation=90,
+            va="center",
+            ha="center",
             transform=ax.transAxes,
         )
         figure.subplots_adjust(top=0.92)
 
     def plot_error_squares(self) -> None:
+        """
+        Plots the model, training set and the squares that represent the error of the model.
+        """
         figure = plt.figure(figsize=(10, 10))
         ax = figure.add_subplot(111)
 
@@ -144,14 +153,14 @@ class plots_linear_regression:
         # Squares
         for index, (x_input, y_input) in enumerate(zip(x_data, y_data)):
             estimated_y = w * x_input + b
-            diff = y_input - estimated_y  # Signed difference
+            diff = y_input - estimated_y
             square_side = abs(diff)
 
             y_corner = min(estimated_y, y_input)
-            x_corner = x_input  # Square extends to the right by default
-            if index == 1: 
-                label = 'Error Squares'
-            else: 
+            x_corner = x_input
+            if index == 1:
+                label = "Error Squares"
+            else:
                 label = None
 
             rect = Rectangle(
@@ -161,21 +170,12 @@ class plots_linear_regression:
                 facecolor="mediumaquamarine",
                 edgecolor="seagreen",
                 alpha=0.25,
-                label = label
+                label=label,
             )
             ax.add_patch(rect)
-        
+
         ax.set_xlabel("X")
         ax.set_ylabel("estimated Y")
         ax.set_title("Least Squares")
-        ax.legend(loc='upper left')
+        ax.legend(loc="upper left")
         plt.show()
-                
-
-
-
-
-
-
-
-        

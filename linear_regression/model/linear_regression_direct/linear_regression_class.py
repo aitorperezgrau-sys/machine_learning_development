@@ -1,7 +1,10 @@
+import time
+
 import numpy as np
+
 from model.plots.linear_regression_plots import plots_linear_regression
 from model.prints.linear_regression_prints import prints_linear_regression
-import time
+
 
 class linear_regression:
 
@@ -31,11 +34,11 @@ class linear_regression:
             Set of the b values, b path.
         linear_regression.cost_list: list
             Set of the cost error, J path.
-        linear_regression.w: float 
+        linear_regression.w: float
             W for convergence
-        linear_regression.b: float 
+        linear_regression.b: float
             B for convergence
-        linear_regression.j: float 
+        linear_regression.j: float
             Cost error function for `linear_regression.w` and `linear_regression.b`
 
         Parameters
@@ -69,24 +72,26 @@ class linear_regression:
         self.cost_list = []
         self.t_convergence = None
 
-    def gradient_descent(self, numerically: bool = False, convergence_method: str = 'zero_gradient') -> None:
+    def gradient_descent(
+        self, numerically: bool = False, convergence_method: str = "zero_gradient"
+    ) -> None:
         """This function creates a gradient descent algorithm based on the
         input parameter, alpha, initial w and b and the training input variables/features
         x and output/target variables y
 
         Parameters
         ----------
-        numerically: bool, optional 
-            If numerically, the partial derivative will be calculated using definition 
+        numerically: bool, optional
+            If numerically, the partial derivative will be calculated using definition
             of derivative. Otherwise, with the derivative of the cost error function with
             respect to the corresponding parameter, it uses a 'batch' approach, meaning each
-            step of the gradient uses all training examples. Default is False. 
+            step of the gradient uses all training examples. Default is False.
         convergence_method: str, optional
-            Way of getting convergence of the model. Allowed parameters are 
+            Way of getting convergence of the model. Allowed parameters are
             - `zero_gradient`: convergence condition is gradient of the cost error funciton is almost 0
             - 'zero_difference': convergence condition is difference between the cost error function of the previous
-              iteration and the current one is almost 0. 
-            Default is 'zero_gradient'. 
+              iteration and the current one is almost 0.
+            Default is 'zero_gradient'.
         """
 
         def compute_total_cost(w: float | int, b: float | int) -> float:
@@ -107,9 +112,8 @@ class linear_regression:
                     to fit the data points in x and y
             """
             error_array = (w * self.input_variables + b) - self.output_variables
-            total_error = float(np.mean(error_array ** 2) / 2.0)
+            total_error = float(np.mean(error_array**2) / 2.0)
             return total_error
-        
 
         def compute_dj(
             w: float | int,
@@ -118,7 +122,7 @@ class linear_regression:
             numerically: bool = False,
         ) -> tuple:
             """
-            Calculates the derivatives of the cost error function. 
+            Calculates the derivatives of the cost error function.
 
             Parameters
             ----------
@@ -126,36 +130,33 @@ class linear_regression:
                 Previous w.
             b: float, int
                 Value of the parameter b to calculate the derivative, it is also the previous b.
-            prev_total_cost: float, int, optional 
-                Total cost error for w_prev and b_prev. Necessary when numerically is True. 
+            prev_total_cost: float, int, optional
+                Total cost error for w_prev and b_prev. Necessary when numerically is True.
             numerically: bool
-                If numerically, the partial derivative will be calculated using definition 
+                If numerically, the partial derivative will be calculated using definition
                 of derivative. Otherwise, with the derivative of the cost error function with
                 respect to w. Default is False.
 
             Returns
             -------
             dj_dw, dj_db: tuple
-                Derivative of the cost error function with respect to w when b is constant, and 
-                with respect to b when w is constant for the w and b given as parameter. 
+                Derivative of the cost error function with respect to w when b is constant, and
+                with respect to b when w is constant for the w and b given as parameter.
             """
 
             if numerically is True:
                 dj_dw = (
-                    compute_total_cost(w + 0.00000001, b)
-                    - prev_total_cost
+                    compute_total_cost(w + 0.00000001, b) - prev_total_cost
                 ) / 0.00000001
                 dj_db = (
-                    compute_total_cost(w, b + 0.00000001)
-                    - prev_total_cost
+                    compute_total_cost(w, b + 0.00000001) - prev_total_cost
                 ) / 0.00000001
             else:
                 error_array = (w * self.input_variables + b) - self.output_variables
-                dj_db = float(np.mean(error_array)) 
+                dj_db = float(np.mean(error_array))
                 dj_dw = float(np.mean(error_array * self.input_variables))
 
             return dj_dw, dj_db
-
 
         prev_total_cost = compute_total_cost(self.w_init, self.b_init)
         total_cost = np.inf
@@ -165,7 +166,7 @@ class linear_regression:
         self.w_list.append(w_prev)
         self.cost_list.append(prev_total_cost)
 
-        if convergence_method == 'zero_difference':
+        if convergence_method == "zero_difference":
             diff_total_cost = abs(total_cost - prev_total_cost)
             t0 = time.perf_counter()
             while diff_total_cost >= 1e-8:
@@ -186,10 +187,10 @@ class linear_regression:
                 prev_total_cost = total_cost
             self.t_convergence = time.perf_counter() - t0
 
-        elif convergence_method == 'zero_gradient':
+        elif convergence_method == "zero_gradient":
             dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
             t0 = time.perf_counter()
-            while np.linalg.norm(np.array([dj_dw,dj_db]))>= 1e-6:
+            while np.linalg.norm(np.array([dj_dw, dj_db])) >= 1e-6:
                 dj_dw, dj_db = compute_dj(w_prev, b_prev, prev_total_cost, numerically)
 
                 w = w_prev - self.alpha * dj_dw
@@ -204,8 +205,10 @@ class linear_regression:
                 prev_total_cost = total_cost
             self.t_convergence = time.perf_counter() - t0
         else:
-            raise ValueError(f"{convergence_method} is not an allowed convergence method: 'zero_gradient' or 'zero_difference'")
-        
+            raise ValueError(
+                f"{convergence_method} is not an allowed convergence method: 'zero_gradient' or 'zero_difference'"
+            )
+
         self.w = self.w_list[-1]
         self.b = self.b_list[-1]
         self.j = self.cost_list[-1]
