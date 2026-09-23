@@ -154,7 +154,7 @@ Vectorization with NumPy, rather than standard Python loops, also ensures a much
 
 ### Results
 
-Fitting on the synthetic data set above (`w_true = 3.5`, `b_true = -10.0`) produces a model that tracks the training set closely:
+Executing gradient descent on the dataset with ($w_{\text{true}} = 3.5$, $b_{\text{true}} = -10.0$) confirms that the fitted line accurately maps the underlying linear relationship:
 
 <img width="1008" height="547" alt="image" src="https://github.com/user-attachments/assets/8b7d6b15-23e8-4286-98a7-15b50e683a23" />
 
