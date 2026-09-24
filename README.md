@@ -212,7 +212,7 @@ zero_difference_linear_regression_model.gradient_descent(numerically=False, conv
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | Zero gradient | 3.4999999962991883 | -9.999998998905552 | 161,385 | 2.8486 | $5.0045 \times 10^{-13}$ |
 | Zero difference | 3.4999629895405104 | -9.989988422639264 | 69,166 | 1.0141 | $5.0052 \times 10^{-5}$ |
-| Relative difference | 0.001057% | 0.100206% | -57.14% | -64.40% | 99.999% $\Delta J = 5.01 \times 10^{-5}$ |
+| Relative difference | 0.001057% | 0.100206% | -57.14% | -64.40% | 99.999% ($\Delta J = 5.01 \times 10^{-5}$) |
 
 Both methods arrive at essentially the same minimum ($w$ and $b$ match within 0.1% relative difference). The 100% relative difference in $J$ is a result of comparing $10^{-13}$ against $10^{-5}$, 
 with an absolute difference of just $5 \times 10^{-5}$. Therefore, using the difference as terminating condition effectively detects the plateau and eliminates more than 92,000 redundant steps.
