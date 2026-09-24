@@ -5,13 +5,13 @@ This repository contains machine learning algorithms developed as a training exe
 ## Linear Regression algorithm
 
 - [Overview](#overview)
+- [Implementation notes](#implementation-notes)
 - [The cost function](#the-cost-function)
 - [Gradient descent](#gradient-descent)
   - [Why gradient descent finds the global minimum](#why-gradient-descent-finds-the-global-minimum)
 - [Step implementation](#step-implementation)
   - [Physical meaning of the sign and learning rate](#physical-meaning-of-the-sign-and-learning-rate)
 - [Usage](#usage)
-- [Implementation notes](#implementation-notes)
 - [Results](#results)
   - [Comparison of the numerical derivative against derivative expression](#comparison-of-the-numerical-derivative-against-derivative-expression)
   - [Comparison of the zero gradient convergence method against zero difference between the cost error functions](#comparison-of-the-zero-gradient-convergence-method-against-zero-difference-between-the-cost-error-functions)
@@ -28,6 +28,12 @@ Linear regression optimizes the parameters $w$ and $b$ to minimize a cost functi
 <img width="792" height="773" alt="image" src="https://github.com/user-attachments/assets/0a8147f8-3010-415b-a849-9707c10919dc" />
 
 This plot can be generated using `model.plots.plot_model_and_training_set()`, accessible via the `.plots` attribute of the `linear_regression` class.
+
+### Implementation notes
+
+A modular architecture has been chosen in which a `linear_regression` class performs the gradient descent algorithm, and has associated printing and plotting classes composed.
+
+Vectorization with NumPy, rather than standard Python loops, also ensures a much faster model, this has been validated since, with loops, a model took ~6 seconds to converge, while with the same training set it takes 1 second with NumPy arrays.
 
 ### The cost function
 
@@ -145,12 +151,6 @@ numerical_linear_regression_model.gradient_descent(numerically=True)
 
 numerical_linear_regression_model.plots.plot_model_and_training_set()
 ```
-
-### Implementation notes
-
-A modular architecture has been chosen in which a `linear_regression` class performs the gradient descent algorithm, and has composed associated printing and plotting classes.
-
-Vectorization with NumPy, rather than standard Python loops, also ensures a much faster model, this has been validated since, with loops, a model took ~6 seconds to converge, while with the same training set it takes 1 second with NumPy arrays.
 
 ### Results
 
