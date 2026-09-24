@@ -73,7 +73,7 @@ $$
 \frac{J(w, b + \epsilon) - J(w, b)}{\epsilon}
 $$
 
-or, in closed form, the partial derivatives with the other variable held constant:
+or, using the partial derivatives with the other variable held constant:
 
 $$
 \frac{\partial J(w, b)}{\partial w} = \frac{1}{m} \sum_{i=1}^{m} \left( f_{w,b}(x^{(i)}) - y^{(i)} \right) x^{(i)}
@@ -154,7 +154,7 @@ Vectorization with NumPy, rather than standard Python loops, also ensures a much
 
 ### Results
 
-Executing gradient descent on the dataset with ($w_{\text{true}} = 3.5$, $b_{\text{true}} = -10.0$) confirms that the fitted line accurately maps the underlying linear relationship:
+Executing gradient descent on the dataset with ($w_{\text{true}} = 3.5$, $b_{\text{true}} = -10.0$) confirms that the fitted line maps the underlying linear relationship:
 
 <img width="1008" height="547" alt="image" src="https://github.com/user-attachments/assets/8b7d6b15-23e8-4286-98a7-15b50e683a23" />
 
@@ -194,10 +194,10 @@ The two methods agree which confirms the gradient expressions match the numerica
 #### Comparison of the zero gradient convergence method against zero difference between the cost error functions
 
 Convergence in technical terms is achieved when the norm of the gradient is close to zero. However, numerically, an exact zero is generally not reached due to finite numerical precision, so convergence is typically detected when the norm of the gradient falls below a chosen tolerance.
-Furthermore, the gradient enters a flat asymptotic region where, scaled by the learning rate $\alpha$, it barely alters $w$ and $b$, causing unnecessary iterations.
+Furthermore, the gradient enters a flat asymptotic region near the minimum where, scaled by the learning rate $\alpha$, it barely alters the values of $w$ and $b$, causing unnecessary iterations.
 
 Therefore, another approach is taking the difference between the cost of the previous iteration and the current one detecting the plateau condition. Nonetheless, this solution is not valid for all error functions, 
-since they may have a plateau section without being a minimum, albeit, because the mean squared error has a strictly convex shape, we can assert that it will represent the real minimum. The `linear_regression` also allows to define the convergence method, with 
+since they may have a plateau section without being a minimum. Nevertheless, because the mean squared error has a strictly convex shape, we can assert that it will represent the real minimum. The `linear_regression` class also allows to define the convergence method, with 
 'zero_gradient' or 'zero_difference', the comparison between both is as follows:
 
 ```python
