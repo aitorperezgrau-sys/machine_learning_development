@@ -102,7 +102,7 @@ Hessian determinant:
 
 $$\det(H) = \frac{1}{m} \sum_{i=1}^{m} \left(x^{(i)}\right)^2 - \left( \frac{1}{m} \sum_{i=1}^{m} x^{(i)} \right)^2 = \overline{x^2} - (\bar{x})^2 = \mathrm{Var}(x)$$
 
-By Jensen's inequality, the mean of the squared inputs is always at least as large as the square of the mean, so $\det(H) \geq 0$, with equality only when every $x^{(i)}$ is identical (zero variance in the inputs). The first-order (top-left) minor of $H$, $\frac{1}{m}\sum (x^{(i)})^2$, is positive as long as not every input is exactly 0. So, for any real training set with at least some variation in $x$, both leading principal minors of $H$ are positive, which by Sylvester's criterion means $H$ is positive definite 
+By Jensen's inequality, the mean of the squared inputs is always at least as large as the square of the mean, so $\det(H) \geq 0$, with equality only when every $x^{(i)}$ is identical (zero variance in the inputs). The first-order (top-left) minor of $H$, $\frac{1}{m}\sum (x^{(i)})^2$, is positive as long as not every input is exactly 0. So, for any real training set with at least some variation in $x$, both leading principal minors of $H$ are positive, which by Sylvester's criterion means $H$ is positive. 
 Therefore, the critical point is a minimum, and the only one that the function has.
 
 ### Step implementation
